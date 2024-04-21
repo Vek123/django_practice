@@ -1,0 +1,41 @@
+{% extends 'base-nav.html'%}
+{% block content %}
+<h1 style="text-align: center">{{ title }}</h1>
+<p><strong>Форма добавления ученика</strong></p>
+<form action="/forms/add-student" method="post" name="form1">
+    {% csrf_token %}
+    {{ form1.as_p }}
+    <button type="submit">Отправить</button>
+</form>
+<hr>
+<p><strong>Форма вывода учеников из одного класса</strong></p>
+<form action="/forms/show-students" method="get" name="form2">
+    {% csrf_token %}
+    {{ form2.as_p }}
+    <button type="submit">Отправить</button>
+</form>
+{% if students is not None %}
+{% for i in students %}
+<p>{{ i }}</p>
+{% endfor %}
+{% endif %}
+<hr>
+<p><strong>Форма назначения классного руководителя для класса</strong></p>
+<form action="/forms/update-teacher-class" method="post" name="form3">
+    {% csrf_token %}
+    {{ form3.as_p }}
+    <button type="submit">Назначить</button>
+</form>
+<hr>
+<p><strong>Форма удаления ученика из списка</strong></p>
+<form action="/forms/delete-student" method="post" name="form4">
+    {% csrf_token %}
+    {{ form4.as_p }}
+    {% if not confirm %}
+    <button type="submit">Удалить</button>
+    {% else %}
+    <p>Вы действительно хотите удалить эту запись?</p>
+    <button type="submit">Подтвердить</button>
+    {% endif %}
+</form>
+{% endblock %}
