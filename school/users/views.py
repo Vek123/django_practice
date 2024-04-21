@@ -7,6 +7,8 @@ from users.forms import LoginUserForm
 
 # Create your views here.
 def login_user(request):
+    if not request.user.is_anonymous:
+        return HttpResponseRedirect(reverse('mainSchool:home'))
     data = {'title': 'Школа'}
     if request.method == 'POST':
         form = LoginUserForm(request.POST)

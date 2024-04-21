@@ -9,12 +9,16 @@ def make_login_rus2eng(birthday, *fio):
                'у': 'u', 'ф': 'f', 'х': 'h', 'ц': 'c', 'ч': 'ch', 'ш': 'sh', 'щ': 'shch', 'ъ': '', 'ы': 'y', 'ь': '',
                'э': 'e', 'ю': 'yu', 'я': 'ya'}
     result = ''
-    for index, value in enumerate(fio):
-        for let_index, let_value in enumerate(value):
-            if index == 0 and let_index == 0:
-                result += letters[let_value.lower()].upper() # Чудинов = CHudinov
-            elif index in [1, 2]:
-                result += letters[value[0].lower()].upper()
+    for name_index, name in enumerate(fio):
+        for let_index, let_value in enumerate(name):
+            if name_index == 0 and let_index == 0:
+                translated_let_lower = letters[let_value.lower()]
+                result += translated_let_lower.upper() if len(translated_let_lower) == 1\
+                    else translated_let_lower[0].upper() + translated_let_lower[1:]  # Чудинов = CHudinov
+            elif name_index in [1, 2]:
+                translated_let_lower = letters[name[0].lower()]
+                result += translated_let_lower.upper() if len(translated_let_lower) == 1\
+                    else translated_let_lower[0].upper()
                 break
             else:
                 result += letters[let_value.lower()]
@@ -67,8 +71,9 @@ class Students(models.Model):
 
     def save(self, *args, **kwargs):
         if self.auth is None:
-            self.auth = User.objects.create_user(username=make_login_rus2eng(self.birthday, self.second_name, self.name, self.last_name),
-                                                 password='xxXX1234')
+            self.auth = User.objects.create_user(
+                username=make_login_rus2eng(self.birthday, self.second_name, self.name, self.last_name),
+                password='xxXX1234', first_name=self.name, last_name=self.second_name)
         super().save(*args, **kwargs)
 
     class Meta:
