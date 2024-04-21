@@ -1,0 +1,72 @@
+* {
+    font-family: Verdana;
+}
+body .background {
+    background: linear-gradient(180deg, #D9D9D9, #D9D9D9, #FFFFFF);
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    height: 100%;
+    z-index: -1;
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.header h1 {
+    display: flex;
+}
+.header nav {
+    width: auto;
+    flex-basis: 30%;
+}
+.header ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: space-around;
+}
+.header li {
+    margin: 0 5px;
+    font-size: 20px;
+}
+.header h1 a {
+    text-decoration: none;
+    color: #505050;
+    padding: 10px;
+    transition: 0.5s ease;
+    border-radius: 10px;
+}
+.header li a {
+    text-decoration: none;
+    color: black;
+    padding: 10px;
+    transition: 0.5s ease;
+    border-radius: 10px;
+}
+.header li a:hover {
+    background-color: rgba(162, 162, 162, 0.501);
+}
+body {
+    margin: 0px;
+    text-indent: 10px;
+}
+.main {
+    text-indent: 0px;
+}
+.main .school-img {
+    width: 800px;
+    border-radius: 0 50px 50px  0;
+    box-shadow: 0 0 20px rgba(162, 162, 162, 0.501);
+    
+}
+@media (max-width: 1024px){
+
+    .header {
+        flex-direction: column;
+        padding: 15px 30px;
+        justify-content: flex-start;
+    }
+}

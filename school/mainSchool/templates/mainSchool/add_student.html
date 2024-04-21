@@ -1,0 +1,10 @@
+{% extends 'base-nav.html'%}
+<h1 style="text-align: center">{{ title }}</h1>
+{% block content %}
+<p><strong>Форма добавления ученика</strong></p>
+<form action="/forms/add-student" method="post" name="form1">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Отправить</button>
+</form>
+{% endblock %}
