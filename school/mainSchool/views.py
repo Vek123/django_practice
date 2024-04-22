@@ -2,7 +2,7 @@ from django.db.models import Min, Count, Max
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
-from django.views.generic import FormView, CreateView
+from django.views.generic import FormView, CreateView, TemplateView
 
 from mainSchool.forms import AddPostStudent, UpdateTeacherClass, DeleteStudent, ShowStudent
 from mainSchool.models import Students, Teachers, StudyClasses
@@ -86,15 +86,16 @@ class DeleteStudentView(FormsMixin, FormView):
             return render(self.request, self.template_name, context=self.extra_context)
 
 
-def forms(request):
-    data = {
+class SchoolForms(FormsMixin, TemplateView):
+    extra_context = {
         'title': 'Формы',
         'form1': AddPostStudent(),
         'form2': ShowStudent(),
+        'students': None,
         'form3': UpdateTeacherClass(),
         'form4': DeleteStudent(),
+        'confirm': False
     }
-    return render(request, 'mainSchool/forms.html', context=data)
 
 
 def page_not_found(request, exception):

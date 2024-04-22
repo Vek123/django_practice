@@ -6,7 +6,7 @@ from django.core.validators import RegexValidator
 from django.utils.deconstruct import deconstructible
 import re
 
-from .models import Students, StudyClasses, make_login_rus2eng
+from .models import Students, StudyClasses, make_login_rus2eng, Teachers
 
 study_classes = StudyClasses.objects.all()
 
@@ -72,6 +72,8 @@ class ShowStudent(forms.ModelForm):
 class UpdateTeacherClass(forms.ModelForm):
     class_name = forms.ModelChoiceField(queryset=study_classes, empty_label='Класс не выбран',
                                         label='Класс обучения')
+    teacher = forms.ModelChoiceField(queryset=Teachers.objects.all(), empty_label='Учитель не выбран',
+                                     label='Учитель')
 
     class Meta:
         model = StudyClasses
