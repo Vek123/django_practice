@@ -36,7 +36,7 @@ class AddPostStudent(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        if not (self.is_bound and not self.errors):
+        if not (self.is_valid()):
             raise forms.ValidationError('Ошибка ввода!')
 
         data = list()

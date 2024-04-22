@@ -14,7 +14,7 @@ def make_login_rus2eng(birthday, *fio):
             if name_index == 0 and let_index == 0:
                 translated_let_lower = letters[let_value.lower()]
                 result += translated_let_lower.upper() if len(translated_let_lower) == 1\
-                    else translated_let_lower[0].upper() + translated_let_lower[1:]  # Чудинов = CHudinov
+                    else translated_let_lower[0].upper() + translated_let_lower[1:]
             elif name_index in [1, 2]:
                 translated_let_lower = letters[name[0].lower()]
                 result += translated_let_lower.upper() if len(translated_let_lower) == 1\
