@@ -28,3 +28,4 @@ class StudyClassesAdmin(admin.ModelAdmin):
     list_per_page = 20
     search_fields = ['class_name']
     list_filter = ['teacher']
+    ordering = ['class_name']

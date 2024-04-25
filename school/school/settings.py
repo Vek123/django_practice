@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django_extensions',
     'debug_toolbar',
     'mainSchool.apps.MainSchoolConfig',
-    'users.apps.UsersConfig'
+    'users.apps.UsersConfig',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -129,4 +130,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = 'mainSchool:home'
 LOGOUT_REDIRECT_URL = 'users:login'
+LOGIN_URL = 'users:login'
 
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ]
+}
