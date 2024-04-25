@@ -1,18 +1,16 @@
-from django.db.models import Min, Count, Max
+from django.db.models import Count, Max
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse, reverse_lazy
-from django.views.generic import FormView, CreateView, TemplateView
+from django.shortcuts import render
+from django.urls import reverse
+from django.views.generic import FormView, TemplateView
+from rest_framework import generics
+from rest_framework.response import Response
+import requests
 
-from mainSchool.forms import AddPostStudent, UpdateTeacherClass, DeleteStudent, ShowStudent
-from mainSchool.models import Students, Teachers, StudyClasses
-from mainSchool.utils import FormsMixin
-
-
-# Create your views here.
-# nav_menu = [{'id': 1, 'title': 'Новости', 'link': None},
-#             {'id': 2, 'title': 'Войти', 'link': None},
-#             ]
+from .forms import AddPostStudent, UpdateTeacherClass, DeleteStudent, ShowStudent
+from .models import Students, StudyClasses
+from .serializers import StudentsSerializer, UpdateTeacherClassSerializer, DeleteStudentSerializer
+from .utils import FormsMixin
 
 
 def home(request):
@@ -44,9 +42,19 @@ def reports(request):
     return render(request, 'mainSchool/reports.html', context=data)
 
 
-class AddStudentView(FormsMixin, CreateView):
+class AddStudentView(FormsMixin, FormView):
     form_class = AddPostStudent
     template_name = 'mainSchool/add_student.html'
+
+    def post(self, request, *args, **kwargs):
+        form = AddPostStudent(request.POST)
+        if form.is_valid():
+            api_url = 'http://127.0.0.1:8000/api/v1/students-list/'
+            form.cleaned_data['study_class'] = form.cleaned_data['study_class'].pk
+            requests.post(api_url, form.cleaned_data)
+            return HttpResponseRedirect(reverse('mainSchool:forms'))
+        self.extra_context['form1'] = form
+        return render(request, template_name=self.template_name, context=self.extra_context)
 
 
 class ShowStudentView(FormsMixin, FormView):
@@ -55,7 +63,14 @@ class ShowStudentView(FormsMixin, FormView):
     def get(self, request, *args, **kwargs):
         form2 = ShowStudent(request.GET)
         if form2.is_valid() and form2.cleaned_data['study_class'] is not None:
-            self.extra_context['students'] = form2.cleaned_data['study_class'].students.all()
+            api_url = 'http://127.0.0.1:8000/api/v1/students-list/{0}/'.format(form2.cleaned_data['study_class'].pk)
+            response = requests.get(api_url)
+            data = None
+            if response.status_code == 200:
+                data = response.json()
+            else:
+                form2.add_error(None, 'Objects do not exist.')
+            self.extra_context['students'] = data
             self.extra_context['form2'] = form2
             return render(request, template_name=self.template_name, context=self.extra_context)
         else:
@@ -66,10 +81,13 @@ class UpdateTeacherClassView(FormsMixin, FormView):
     form_class = UpdateTeacherClass
 
     def form_valid(self, form):
-        study_class = form.cleaned_data['class_name']
-        teacher = form.cleaned_data['teacher']
-        study_class.teacher = teacher
-        study_class.save()
+        study_class = form.cleaned_data['class_name'].pk
+        api_url = 'http://127.0.0.1:8000/api/v1/study-classes/{0}/'.format(study_class)
+        data = {
+            'class_name': form.cleaned_data['class_name'].class_name,
+            'teacher': form.cleaned_data['teacher'].pk
+        }
+        requests.patch(api_url, data)
         return super().form_valid(form)
 
 
@@ -100,3 +118,38 @@ class SchoolForms(FormsMixin, TemplateView):
 
 def page_not_found(request, exception):
     return HttpResponse("<h1>Страница не найдена</h1>")
+
+
+# ---------------------------------API--------------------------------------
+class StudentsApiView(generics.ListCreateAPIView):
+    serializer_class = StudentsSerializer
+    queryset = Students.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        cls_id = kwargs.get('study_class', None)
+        if cls_id is None:
+            return self.list(request, *args, **kwargs)
+        try:
+            cls = StudyClasses.objects.get(pk=cls_id)
+        except:
+            return Response({"error": "Object does not exist."})
+        self.queryset = cls.students.all()
+        return self.list(request, *args, **kwargs)
+
+    # def get(self, request, cls):
+    #     try:
+    #         cls = StudyClasses.objects.get(pk=cls)
+    #     except:
+    #         return Response({"error": "Object does not exist."})
+    #     students = cls.students.all()
+    #     return Response({'students': StudentsSerializer(students, many=True).data})
+
+
+class UpdateClassTeacherApiView(generics.UpdateAPIView):
+    queryset = StudyClasses.objects.all()
+    serializer_class = UpdateTeacherClassSerializer
+
+
+class DeleteStudentApiView(generics.DestroyAPIView):
+    queryset = Students.objects.all()
+    serializer_class = DeleteStudentSerializer

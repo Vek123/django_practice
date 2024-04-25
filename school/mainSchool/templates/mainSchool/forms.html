@@ -16,7 +16,7 @@
 </form>
 {% if students is not None %}
 {% for i in students %}
-<p>{{ i }}</p>
+<p>{{ i.second_name }} {{ i.name }} {{i.last_name}}</p>
 {% endfor %}
 {% endif %}
 <hr>

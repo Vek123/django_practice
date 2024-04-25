@@ -68,6 +68,12 @@ class ShowStudent(forms.ModelForm):
         model = Students
         fields = ['study_class']
 
+    def __init__(self, *args, **kwargs):
+        study_class = kwargs.pop('study_class', None)
+        super().__init__(*args, **kwargs)
+        if study_class:
+            self.fields['study_class'].queryset = StudyClasses.objects.filter(class_name=study_class)
+
 
 class UpdateTeacherClass(forms.ModelForm):
     class_name = forms.ModelChoiceField(queryset=study_classes, empty_label='Класс не выбран',
