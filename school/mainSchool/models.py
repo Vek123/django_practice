@@ -23,13 +23,22 @@ def make_login_rus2eng(birthday, *fio):
             else:
                 result += letters[let_value.lower()]
     birth_hash = birthday.day + birthday.month + birthday.year
+    # unique fio and birthday check
+    student = Students.objects.filter(auth__username=result+str(birth_hash))
+    while student:
+        if str(student[0]) == " ".join(fio):
+            break
+        else:
+            birth_hash += 1
+        student = Students.objects.filter(auth__username=result + str(birth_hash))
     result += str(birth_hash)
     return result
 
 
 # Create your models here.
 class Teachers(models.Model):
-    auth = models.OneToOneField(User, on_delete=models.CASCADE, default=None, unique=True, verbose_name='Логин')
+    auth = models.OneToOneField(User, on_delete=models.CASCADE, default=None, unique=True, verbose_name='Логин',
+                                blank=True, null=True)
     second_name = models.CharField(max_length=50, verbose_name='Фамилия')
     name = models.CharField(max_length=50, verbose_name='Имя')
     last_name = models.CharField(max_length=50, blank=True, verbose_name='Отчество')
@@ -38,6 +47,13 @@ class Teachers(models.Model):
 
     def __str__(self):
         return self.second_name + " " + self.name + " " + self.last_name
+
+    def save(self, *args, **kwargs):
+        if self.auth is None:
+            self.auth = User.objects.create_user(
+                username=make_login_rus2eng(self.birthday, self.second_name, self.name, self.last_name),
+                password='xxXX1234', first_name=self.name, last_name=self.second_name)
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Учитель'
@@ -75,6 +91,10 @@ class Students(models.Model):
                 username=make_login_rus2eng(self.birthday, self.second_name, self.name, self.last_name),
                 password='xxXX1234', first_name=self.name, last_name=self.second_name)
         super().save(*args, **kwargs)
+
+    def delete(self, using=None, keep_parents=False):
+        self.auth.delete()
+        super().delete(using, keep_parents)
 
     class Meta:
         verbose_name = 'Учащийся'

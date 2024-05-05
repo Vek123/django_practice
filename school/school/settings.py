@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-rw)8d0m4d7@!(0mt(g2tg*16+1&h3__wxyy0n9gxdw$ia0821$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 INTERNAL_IPS = [
     "127.0.0.1",
@@ -44,6 +44,10 @@ INSTALLED_APPS = [
     'mainSchool.apps.MainSchoolConfig',
     'users.apps.UsersConfig',
     'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
+    # 'backend_api',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -55,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'corsheaders.middleware.CorsMiddleware'
 ]
 
 ROOT_URLCONF = 'school.urls'
@@ -132,9 +137,26 @@ LOGIN_REDIRECT_URL = 'mainSchool:home'
 LOGOUT_REDIRECT_URL = 'users:login'
 LOGIN_URL = 'users:login'
 
+CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ORIGIN_WHITELIST = [
+#     "http://127.0.0.1:3000"
+# ]
+#
+# CSRF_COOKIE_SECURE = False
+# CORS_ALLOW_CREDENTIALS = True
+
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
-    ]
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+}
+
+DJOSER = {
+    'SERIALIZERS': {'user': 'users.serializers.CurrentUserSerializer'}
 }
