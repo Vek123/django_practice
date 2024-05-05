@@ -1,0 +1,21 @@
+#login form {
+    position: relative;
+    text-align: center;
+    top: 100px;
+    width: 430px;
+    margin: 0 auto;
+    border: 1px solid #505050;
+    border-radius: 15px;
+    background-color: silver;
+    box-shadow: rgba(0, 0, 0, 0.4) 1px 1px 3px;
+}
+#login form input, #login form button {
+    width: 220px;
+
+}
+#login form button {
+    height: 50px;
+    font-size: x-large;
+    margin: 0;
+
+}
