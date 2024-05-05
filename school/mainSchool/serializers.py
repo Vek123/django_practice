@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from mainSchool.models import Students, StudyClasses
+from mainSchool.models import Students, StudyClasses, Teachers
 
 
 class StudentsSerializer(serializers.ModelSerializer):
@@ -15,13 +15,13 @@ class StudentsSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class UpdateTeacherClassSerializer(serializers.ModelSerializer):
+class StudyClassSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudyClasses
         fields = '__all__'
 
 
-class DeleteStudentSerializer(serializers.ModelSerializer):
+class TeachersSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Students
+        model = Teachers
         fields = '__all__'

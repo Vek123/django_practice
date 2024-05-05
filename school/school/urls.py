@@ -15,9 +15,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 
-from mainSchool.views import page_not_found, StudentsApiView, UpdateClassTeacherApiView, DeleteStudentApiView
+from mainSchool.views import page_not_found, ReportsApiView
+from school import routers
 
 # Обращение к View осуществляется в виде: 'namespace_name:app_url_name'
 
@@ -25,10 +26,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('mainSchool.urls', namespace='mainSchool')),
     path('', include('users.urls', namespace='users')),
-    path('api/v1/students-list/', StudentsApiView.as_view()),
-    path('api/v1/students-list/<int:study_class>/', StudentsApiView.as_view()),
-    path('api/v1/study-classes/<int:pk>/', UpdateClassTeacherApiView.as_view()),
-    path('api/v1/delete-student/<int:pk>/', DeleteStudentApiView.as_view()),
+    path('api/v1/', include(routers.router.urls)),
+    re_path(r'^auth/', include('djoser.urls')),
+    re_path(r'^auth/', include('djoser.urls.authtoken')),
+    path('api/v1/reports', ReportsApiView.as_view()),
     path("__debug__/", include("debug_toolbar.urls")),
 ]
 handler_404 = page_not_found

@@ -1,13 +1,13 @@
 {% extends 'base-nav.html' %}
 {% block content %}
 <ul>
-<li>Отчёт 1: <br>Самый младший первокласник: {{ young.second_name }} {{ young.name }} {{ young.last_name }}, его дата рождения: {{ young.birthday }}</li>
+<li>Отчёт 1: <br>Самый младший первоклассник: {{ young.second_name }} {{ young.name }} {{ young.last_name }}, его дата рождения: {{ young.birthday }}</li>
 <li>Отчёт 2: <br>Количество учеников во всех вторых классах: {{ count_guys_in_second_classes }}</li>
 <li>Отчёт 3: <br>
     <ul>
     {% for i in teachers_students %}
     <li>
-        {{ i.teacher__second_name }} {{ i.teacher__name }} {{ teacher__last_name }} имеет {{ i.total }} учеников в расспоряжении.
+        {{ i.teacher__second_name }} {{ i.teacher__name }} {{ teacher__last_name }} имеет {{ i.total }} учеников в распоряжении.
     </li>
     {% endfor %}
      </ul>
