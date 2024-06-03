@@ -1,5 +1,5 @@
 import React from "react"
-import axios from "axios"
+import apiClient from "../api/apiConfig"
 
 
 class Form4 extends React.Component {
@@ -12,7 +12,7 @@ class Form4 extends React.Component {
           submit: "",
           confirm_form: false
         }
-        axios.get("http://127.0.0.1:8000/api/v1/students/").then((res) => {
+        apiClient.get("/api/v1/students/").then((res) => {
           this.setState({students: res.data})
         })
     }
@@ -32,7 +32,7 @@ class Form4 extends React.Component {
             this.setState({confirm_form: "Подтвердить"})
         } else {
             this.setState({confirm_form: false})
-            axios.delete("http://127.0.0.1:8000/api/v1/students/" + this.state.id + "/")
+            apiClient.delete(`/api/v1/students/${this.state.id}/`)
             .then(response => {
                 this.setState({
                     submit: "Пользователь удалён!",

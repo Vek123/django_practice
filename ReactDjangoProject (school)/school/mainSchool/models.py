@@ -24,13 +24,8 @@ def make_login_rus2eng(birthday, *fio):
                 result += letters[let_value.lower()]
     birth_hash = birthday.day + birthday.month + birthday.year
     # unique fio and birthday check
-    student = Students.objects.filter(auth__username=result+str(birth_hash))
-    while student:
-        if str(student[0]) == " ".join(fio):
-            break
-        else:
-            birth_hash += 1
-        student = Students.objects.filter(auth__username=result + str(birth_hash))
+    while Students.objects.filter(auth__username=result+str(birth_hash)).exists():
+        birth_hash += 1
     result += str(birth_hash)
     return result
 

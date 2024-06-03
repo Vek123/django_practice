@@ -6,8 +6,8 @@ class Home extends React.Component {
 
   render() {
     return (
-      <div className='news'>
-          <Header title={this.props.title} user={this.props.user}/>
+      <div className='home'>
+          <Header title={this.props.title}/>
           <h1>{this.props.title}</h1>
           <img className='school-img' src={logo} alt='Логотип школы'/>
       </div>

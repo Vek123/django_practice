@@ -1,5 +1,5 @@
 import React from "react"
-import axios from "axios"
+import apiClient from "../api/apiConfig"
 
 
 class Form2 extends React.Component {
@@ -18,10 +18,7 @@ class Form2 extends React.Component {
     }
     handleSubmit = async (event) => {
         event.preventDefault()
-        // if (this.state.id === "") {
-        //     await this.setState({id: this.props.classes[0].id})
-        // }
-        axios.get("http://127.0.0.1:8000/api/v1/studyclasses/" + this.state.id + "/students/")
+        apiClient.get(`/api/v1/studyclasses/${this.state.id}/students/`)
         .then(response => {
             this.setState({answer: response.data, submit: ""})
         })

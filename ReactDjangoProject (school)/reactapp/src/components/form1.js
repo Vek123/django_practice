@@ -1,5 +1,5 @@
 import React from "react"
-import axios from "axios"
+import apiClient from "../api/apiConfig"
 
 
 class Form1 extends React.Component {
@@ -31,7 +31,7 @@ class Form1 extends React.Component {
             birthday: this.state.birthday,
             study_class: this.state.study_class
         }
-        axios.post("http://127.0.0.1:8000/api/v1/students/", data)
+        apiClient.post("/api/v1/students/", data)
         .then(response => {
             this.setState({submit: "Запись была успешно добавлена!"})
         })

@@ -1,11 +1,13 @@
 import React from "react"
-import News from "./components/news"
-import Home from "./components/home"
-import Reports from "./components/reports"
-import Forms from "./components/forms"
-import Login from "./components/login"
-import Logout from "./components/logout"
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
+import { Suspense, lazy } from "react"
+
+const News = lazy(() => import("./components/news"))
+const Home = lazy(() => import("./components/home"))
+const Reports = lazy(() => import("./components/reports"))
+const Forms = lazy(() => import("./components/forms"))
+const Login = lazy(() => import("./components/login"))
+const Logout = lazy(() => import("./components/logout"))
 
 
 class App extends React.Component {

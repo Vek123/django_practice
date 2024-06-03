@@ -1,33 +1,20 @@
 import React from "react"
-import axios from "axios"
 import Header from "./header"
+import apiClient from "../api/apiConfig"
 
 
 class Logout extends React.Component {
 
     logout() {
-        const token = localStorage.getItem("Token")
-        axios.post("http://127.0.0.1:8000/auth/token/logout/", {}, {
-            headers: {
-                'Authorization': `Token ${token}`,
-                'Content-Type': 'application/json',
-            }
-        })
+        apiClient.post("/auth/token/logout/")
         .then(response => {
             localStorage.clear()
             window.location.href = "/"
         })
         .catch((error) => {
             localStorage.clear()
-            if (error.response) {
-                console.log(error.response);
-                window.location.href = "/"
-                console.log("server responded");
-            } else if (error.request) {
-            console.log("network error");
-            } else {
-            console.log(error);
-            }
+            console.error(error)
+            window.location.href = "/"
         })
     }
 

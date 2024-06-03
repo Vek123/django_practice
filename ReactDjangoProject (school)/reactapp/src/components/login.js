@@ -10,7 +10,7 @@ class Login extends React.Component {
         this.state = {
             username: "",
             password: "",
-            errorAuth: undefined
+            errorAuth: null,
         }
     }
     handleChange = (event) => {
@@ -23,49 +23,20 @@ class Login extends React.Component {
         event.preventDefault()
         this.authenticate(this.state.username, this.state.password, () => {window.location.href = "/"})
     }
-    authenticate(u, p, callback) {
-        const data = {
-          username: u,
-          password: p
-        }
-        axios.post("http://127.0.0.1:8000/auth/token/login/", data)
-        .then(response => {
-          const Token = response.data.auth_token
-          localStorage.setItem("Token", Token)
-        //   console.log(response)
-          axios.get("http://127.0.0.1:8000/auth/users/", {
-            headers: {
-              'Authorization': `Token ${Token}`
-            }
-          })
-          .then(response => {
-            localStorage.setItem("User", JSON.stringify(response.data))
-            // console.log(response)
-            callback()
-          })
-          .catch((error) => {
-            if (error.response) {
-                console.log(error.response);
-                console.log("server responded");
-            } else if (error.request) {
-            console.log("network error");
-            } else {
-            console.log(error);
-            }
-        })
-        })
-        .catch((error) => {
-          if (error.response) {
-              console.log(error.response);
-              this.setState({errorAuth: error.response.data.non_field_errors[0]})
-              console.log("server responded");
-          } else if (error.request) {
-          console.log("network error");
-          } else {
-          console.log(error);
-          }
-      })
+    authenticate(u, p, goToHome) {
+      const data = {
+        username: u,
+        password: p
       }
+      axios.post("http://127.0.0.1:8000/auth/token/login/", data)
+      .then(async response => {
+        localStorage.setItem("User", JSON.stringify(response.data))
+        goToHome()
+      })
+      .catch(error => {
+        console.error(error)
+      })
+    }
     render() {
         return (
             <div id="login">

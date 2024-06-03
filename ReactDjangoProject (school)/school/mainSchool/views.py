@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count, Max
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -5,6 +7,7 @@ from django.urls import reverse
 from django.views.generic import FormView, TemplateView
 from rest_framework import generics, mixins, viewsets
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 import requests
 from rest_framework.views import APIView
@@ -16,18 +19,21 @@ from .serializers import StudentsSerializer, StudyClassSerializer, TeachersSeria
 from .utils import FormsMixin
 
 
+@login_required
 def home(request):
     data = {'title': 'Школа',
             }
     return render(request, 'mainSchool/index.html', context=data)
 
 
+@login_required
 def news(request):
     data = {'title': 'Новости',
             }
     return render(request, 'mainSchool/news.html', context=data)
 
 
+@login_required
 def reports(request):
     earliest_birthday = Students.objects.filter(study_class__class_name__regex=r"1\w{1}").aggregate(
         birthday=Max("birthday"))
@@ -45,7 +51,7 @@ def reports(request):
     return render(request, 'mainSchool/reports.html', context=data)
 
 
-class AddStudentView(FormsMixin, FormView):
+class AddStudentView(LoginRequiredMixin, FormsMixin, FormView):
     form_class = AddPostStudent
     template_name = 'mainSchool/add_student.html'
 
@@ -60,7 +66,7 @@ class AddStudentView(FormsMixin, FormView):
         return render(request, template_name=self.template_name, context=self.extra_context)
 
 
-class ShowStudentView(FormsMixin, FormView):
+class ShowStudentView(LoginRequiredMixin, FormsMixin, FormView):
     form_class = ShowStudent
 
     def get(self, request, *args, **kwargs):
@@ -80,7 +86,7 @@ class ShowStudentView(FormsMixin, FormView):
             return HttpResponseRedirect(reverse('mainSchool:forms'))
 
 
-class UpdateTeacherClassView(FormsMixin, FormView):
+class UpdateTeacherClassView(LoginRequiredMixin, FormsMixin, FormView):
     form_class = UpdateTeacherClass
 
     def form_valid(self, form):
@@ -94,7 +100,7 @@ class UpdateTeacherClassView(FormsMixin, FormView):
         return super().form_valid(form)
 
 
-class DeleteStudentView(FormsMixin, FormView):
+class DeleteStudentView(LoginRequiredMixin, FormsMixin, FormView):
     form_class = DeleteStudent
 
     def form_valid(self, form):
@@ -107,7 +113,7 @@ class DeleteStudentView(FormsMixin, FormView):
             return render(self.request, self.template_name, context=self.extra_context)
 
 
-class SchoolForms(FormsMixin, TemplateView):
+class SchoolForms(LoginRequiredMixin, FormsMixin, TemplateView):
     extra_context = {
         'title': 'Формы',
         'form1': AddPostStudent(),
@@ -125,6 +131,7 @@ def page_not_found(request, exception):
 
 # ---------------------------------API--------------------------------------
 class StudentsApiViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     queryset = Students.objects.all()
     serializer_class = StudentsSerializer
 
@@ -133,6 +140,7 @@ class StudyClassApiViewSet(mixins.ListModelMixin,
                            mixins.RetrieveModelMixin,
                            mixins.UpdateModelMixin,
                            GenericViewSet):
+    permission_classes = [IsAuthenticated]
     serializer_class = StudyClassSerializer
     queryset = StudyClasses.objects.all()
 
@@ -145,6 +153,7 @@ class StudyClassApiViewSet(mixins.ListModelMixin,
 
 
 class ReportsApiView(APIView):
+    permission_classes = [IsAuthenticated]
     earliest_birthday = Students.objects.filter(study_class__class_name__regex=r"1\w{1}").aggregate(
         birthday=Max("birthday"))
     earliest_birthday_first_class_guy = Students.objects.get(birthday=earliest_birthday['birthday'])
@@ -162,5 +171,6 @@ class ReportsApiView(APIView):
 
 
 class TeachersApiViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     serializer_class = TeachersSerializer
     queryset = Teachers.objects.all()

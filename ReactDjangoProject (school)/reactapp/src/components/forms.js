@@ -4,49 +4,42 @@ import Form1 from "./form1"
 import Form2 from "./form2"
 import Form3 from "./form3"
 import Form4 from "./form4"
-import axios from "axios"
+import apiClient from "../api/apiConfig"
 
-
-// class Forms extends React.Component {
-
-//   constructor(props) {
-//     super(props)
-
-//     this.state = {
-//       classes: [],
-//     }
-//     axios.get("http://127.0.0.1:8000/api/v1/studyclasses/").then((res) => {
-//       this.setState({classes: res.data})
-//     })
-//   }
-
-  // classesList(classes){
-  //   return (
-  //     <select name="study_class" required id="id_study_class" defaultValue={"DEFAULT"}>
-  //       <option value="DEFAULT">Класс не выбран</option>
-  //       {classes.length > 0 && (
-  //         classes.map((item, index) => (<option value={item.id} key={index}>{item.class_name}</option>))
-  //       )}
-  //     </select>
-  //   )
-  // }
 
 const Forms = (props) => {
   const [classes, setClasses] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/v1/studyclasses/");
-        setClasses(response.data);
+        const response = await apiClient.get("/api/v1/studyclasses/")
+        setLoading(false)
+        setClasses(response.data)
       } catch (error) {
-        console.error(error);
+        setError(true)
+        setLoading(false)
       }
     };
 
     fetchData();
   }, []);
-  if (!classes.length) {
-    return <div>Loading...</div>
+  if (loading) {
+    return (
+      <div>
+        <Header title={props.title}/>
+        <h2>Loading...</h2>
+      </div>
+    )
+  }
+  if (error) {
+    return (
+      <div>
+        <Header title={props.title}/>
+        <h2>Error</h2>
+      </div>
+    )
   }
   return (
     <div>

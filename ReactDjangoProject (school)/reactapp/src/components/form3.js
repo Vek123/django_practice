@@ -1,5 +1,5 @@
 import React from "react"
-import axios from "axios"
+import apiClient from "../api/apiConfig"
 
 
 class Form3 extends React.Component {
@@ -21,7 +21,7 @@ class Form3 extends React.Component {
 
     fetchTeachers = async () => {
         try {
-            const response = await axios.get("http://127.0.0.1:8000/api/v1/teachers/")
+            const response = await apiClient.get("/api/v1/teachers/")
             this.setState({ teachers_list: response.data, loading: false })
         } catch (error) {
             console.error(error)
@@ -44,7 +44,7 @@ class Form3 extends React.Component {
             study_class: this.state.study_class,
             teacher: this.state.teacher
         }
-        axios.patch("http://127.0.0.1:8000/api/v1/studyclasses/" + this.state.study_class + "/", data)
+        apiClient.patch(`/api/v1/studyclasses/${this.state.study_class}/`, data)
         .then(response => {
             this.setState({submit: "Учитель был назначен!"})
             this.props.classes.find(study_class => study_class.id === Number(this.state.study_class)).teacher = this.state.teacher

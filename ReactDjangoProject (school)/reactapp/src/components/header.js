@@ -10,10 +10,11 @@ class Header extends React.Component {
         {title: "Формы", link: "/forms"}
     ]
 
-    showLogin(user) {
-        if (user) {
+    showLogin() {
+        
+        if (this.user) {
             return (
-                <li>{ user[0].first_name || user[0].username } | <a href="/user/logout">Выйти</a></li>
+                <li>{ this.user.first_name || this.user.username } | <a href="/user/logout">Выйти</a></li>
             )
         }
         else {
@@ -37,7 +38,7 @@ class Header extends React.Component {
                         {this.nav_menu.map((item, index) => (
                             <li key={index}><a href={item.link}>{item.title}</a></li>
                         ))}
-                        {this.showLogin(this.user)}
+                        {this.showLogin()}
                     </ul>
                 </nav>
             </div>
