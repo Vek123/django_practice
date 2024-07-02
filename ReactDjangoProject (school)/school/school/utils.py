@@ -18,12 +18,12 @@ class CustomAuthToken(ObtainAuthToken):
         set_cookie_str = f'Token={token}; Path=/; Secure; HttpOnly; SameSite=None; Partitioned;'
         response = Response({
             'user_id': user.pk,
+            'username': user.username,
             'email': user.email,
             'first_name': user.first_name,
             'last_name': user.last_name
         })
         response.headers['Set-Cookie'] = set_cookie_str
-        print(response.headers)
         return response
 
 

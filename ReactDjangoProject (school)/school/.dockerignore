@@ -1,1 +1,5 @@
 .venv/
+nginx.conf
+docker-compose.yml
+Dockerfile
+school/settings/dev.py

@@ -14,7 +14,7 @@ function NumberWithSpaces(number) {
 
 const Products = observer((props) => {
     const { productsStore } = useStores()
-    const isActiveItem = productsStore.alterProduct ? productsStore.alterProduct : ""
+    const isActiveItem = productsStore.alterProduct ?? ""
 
     useEffect(() => {
         productsStore.getProductsAction()

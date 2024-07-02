@@ -1,7 +1,7 @@
 {% extends 'base-nav.html' %}
 {% block content %}
 <h1>Страница входа в систему</h1>
-<form action="" method="post" name="form_login">
+<form action="#" method="post" name="form_login">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Войти</button>

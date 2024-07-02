@@ -30,13 +30,6 @@ class ProductsStore {
         })
         window.location.reload()
     }
-    setAlterProduct = async (index) => {
-        if (index !== null && this.alterProduct === null) {
-            this.alterProduct = this.products[index]
-        } else if (index === null) {
-            this.alterProduct = null
-        }
-    }
     alter = async (data) => {
         await axios.put("http://127.0.0.1:8000/api/v1/products/" + data.get("id") + "/", data, {
             headers: {
@@ -45,6 +38,13 @@ class ProductsStore {
         })
         this.alterProduct = null
         window.location.reload()
+    }
+    setAlterProduct = async (index) => {
+        if (index !== null && this.alterProduct === null) {
+            this.alterProduct = this.products[index]
+        } else if (index === null) {
+            this.alterProduct = null
+        }
     }
     getProductsAction = () => {
         this.isLoading = true

@@ -2,10 +2,9 @@ version: '3.8'
 
 services:
   web:
-#    image: vek123/school-django
-    build: .
-    volumes:
-      - static_volume:/app/static
+    image: vek123/school-django-app:latest
+    env_file:
+      - .env
     ports:
       - "8000:8000"
 
@@ -13,11 +12,12 @@ services:
     image: nginx:latest
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
-      - static_volume:/static
     ports:
       - "80:80"
     depends_on:
       - web
 
-volumes:
-  static_volume:
+  react-app:
+    image: vek123/school-react-app:latest
+    ports:
+      - "3000:3000"

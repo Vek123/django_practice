@@ -15,10 +15,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.conf.urls.static import static
 from django.urls import path, include, re_path
 
 from mainSchool.views import page_not_found, ReportsApiView
-from school import routers
+from school import routers, settings
 from .utils import CustomAuthToken, CustomAuthTokenLogout
 
 # Обращение к View осуществляется в виде: 'namespace_name:app_url_name'
@@ -33,7 +34,7 @@ urlpatterns = [
     re_path(r'^auth/', include('djoser.urls')),
     path('api/v1/reports', ReportsApiView.as_view()),
     path("__debug__/", include("debug_toolbar.urls")),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 handler_404 = page_not_found
 
 admin.site.site_header = "Панель администрирования"

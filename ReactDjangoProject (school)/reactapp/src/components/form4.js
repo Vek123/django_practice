@@ -12,9 +12,11 @@ class Form4 extends React.Component {
           submit: "",
           confirm_form: false
         }
+    }
+    componentDidMount() {
         apiClient.get("/api/v1/students/").then((res) => {
-          this.setState({students: res.data})
-        })
+            this.setState({students: res.data})
+          })
     }
     handleChange = (event) => {
         this.setState({

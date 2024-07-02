@@ -1,0 +1,25 @@
+import Faker
+fake = Faker('ru_RU')
+for i range(18):
+    full_name = faker.name().split(" ")
+    birthday = faker.date_of_birth(minimum_age=24, maximum_age=65)
+    Teachers.objects.create(second_name=full_name[2], name=full_name[0], last_name=full_name[1], birthday=birthday)
+    time.sleep(1)
+
+iter = 0
+
+for i in range(1, 11):
+    for k in ["А", "Б"]:
+        class_name = str(i) + k
+        StudyClasses.objects.create(class_name=class_name, teacher=teachers[iter])
+	iter += 1
+	time.sleep(1)
+
+iter = 0
+
+for i in classes:
+    for k in range(25):
+	full_name = faker.name().split(" ")
+	birthday = faker.date_of_birth(minimum_age=int(i.class_name[:-1])+6, maximum_age=int(i.class_name[:-1]+8)
+	Students.objects.create(second_name=full_name[2], name=full_name[0], last_name=full_name[1], birthday=birthday, study_class=i)
+	time.sleep(1)

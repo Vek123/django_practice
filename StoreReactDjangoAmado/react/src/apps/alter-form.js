@@ -181,19 +181,19 @@ class AlterForm extends React.Component {
                 <div className="app_form_notation">Заполните все обязательные поля с *</div>
                 <br/>
                 <form className="app_form_form">
-                    <div className="app_form_form_field_margins">
+                    <div className="app_form_form_field_container">
                         {(this.state.title.length > 0 || this.state.titleDirty) && <div className="app_form_form_helptext">Название*</div>}
                         <input type="text" name="title" maxLength="50" required placeholder={this.makePlaceHolder("title")} onBlur={event => this.handleBlur(event)} value={this.state.title} onChange={event => this.handleTitleChange(event)}/>
                         {(this.state.titleDirty && this.state.titleError) && <div className="app_form_form_errortext">{this.state.titleError}</div>}
                     </div>
                     <br/>
-                    <div className="app_form_form_field_margins">
+                    <div className="app_form_form_field_container">
                         {(this.state.price !== null || this.state.priceDirty) && <div className="app_form_form_helptext">Цена*</div>}
                         <input type="number" name="price" maxLength="30" required placeholder={this.makePlaceHolder("price")} onBlur={event => this.handleBlur(event)} value={this.state.price} onChange={event => this.handlePriceChange(event)}/>
                         {(this.state.priceDirty && this.state.priceError) && <div className="app_form_form_errortext">{this.state.priceError}</div>}
                     </div>
                     <br/>
-                    <div className="app_form_form_field_margins">
+                    <div className="app_form_form_field_container">
                         {this.state.fileName !== "Фото" && <div className="app_form_form_helptext">Фото</div>}
                         <div className="app_form_form_file">
                             <input type="file" accept="image/*" name="image" id="id_image" onChange={event => this.handleFIleChange(event)}/>
@@ -204,7 +204,7 @@ class AlterForm extends React.Component {
                         </div>
                     </div>
                     <br/>
-                    <div className="app_form_form_field_margins">
+                    <div className="app_form_form_field_container">
                     {this.state.description.length > 0 && <div className="app_form_form_helptext">Описание</div>}
                     <textarea name="description" maxLength="200" placeholder="Описание" value={this.state.description ? this.state.description : ""} onChange={event => this.handleDescriptionChange(event)}/>
                     </div>

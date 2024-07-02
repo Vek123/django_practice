@@ -1,7 +1,7 @@
 import React from "react"
 import Header from "./header"
 import '../css/auth.css'
-import axios from "axios"
+import apiClient from "../api/apiConfig"
 
 
 class Login extends React.Component {
@@ -28,7 +28,7 @@ class Login extends React.Component {
         username: u,
         password: p
       }
-      axios.post("http://127.0.0.1:8000/auth/token/login/", data)
+      apiClient.post("/auth/token/login/", data)
       .then(async response => {
         localStorage.setItem("User", JSON.stringify(response.data))
         goToHome()
